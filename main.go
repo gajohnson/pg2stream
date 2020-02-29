@@ -16,6 +16,7 @@ func main() {
 	dbport := flag.Int("dbport", 5432, "database port")
 	dbuser := flag.String("user", "root", "database user")
 	drop := flag.Bool("drop", false, "drop replication slot on start up")
+	buffer := flag.Int("buffer", 1, "internal buffer size")
 	flag.Parse()
 
 	ctx := context.Context(context.Background())
@@ -34,7 +35,7 @@ func main() {
 
 	s := stream.StdoutStream{}
 
-	wal := make(chan pgx.WalMessage)
+	wal := make(chan pgx.WalMessage, *buffer)
 	ack := make(chan uint64)
 
 	go s.Handle(wal, ack)
