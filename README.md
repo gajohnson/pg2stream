@@ -25,7 +25,5 @@
 
 ### Todo
 
-* Connection keep alive
-* LSN advancing & recovery
 * Kinesis
 * Kafka
