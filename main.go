@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gajohnson/pg2stream/replication"
+	"github.com/gajohnson/pg2stream/stream"
+	"github.com/jackc/pgx"
 )
 
 func main() {
@@ -30,6 +32,13 @@ func main() {
 		Options:           []string{"\"include-schemas\" 'off'", "\"include-types\" 'off'"},
 	}
 
+	s := stream.StdoutStream{}
+
+	wal := make(chan pgx.WalMessage)
+	ack := make(chan uint64)
+
+	go s.Handle(wal, ack)
+
 	r.Connect(ctx)
-	r.Read(ctx)
+	r.Read(ctx, wal, ack)
 }

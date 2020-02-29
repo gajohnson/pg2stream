@@ -2,7 +2,6 @@ package replication
 
 import (
 	"context"
-	"fmt"
 	"github.com/jackc/pgx"
 	"time"
 )
@@ -56,20 +55,30 @@ func (r *Replication) Connect(ctx context.Context) {
 	go r.keepalive(ctx)
 }
 
-func (r *Replication) Read(ctx context.Context) {
+func (r *Replication) Read(ctx context.Context, send chan pgx.WalMessage, ack chan uint64) {
+	go r.acknowlege(ack)
+
 	for {
 		if msg, err := r.Connection.WaitForReplicationMessage(ctx); err != nil {
 			panic(err)
 		} else {
 			if msg.WalMessage != nil {
-				fmt.Println(string(msg.WalMessage.WalData))
-				r.status(msg.WalMessage.WalStart)
+				send <- *msg.WalMessage
 			}
 			if msg.ServerHeartbeat != nil {
 				if msg.ServerHeartbeat.ReplyRequested == 1 {
 					r.status(0)
 				}
 			}
+		}
+	}
+}
+
+func (r *Replication) acknowlege(ack chan uint64) {
+	for {
+		select {
+		case lsn := <-ack:
+			r.status(lsn)
 		}
 	}
 }
