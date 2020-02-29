@@ -1,7 +1,7 @@
 .PHONY: build
 build:
-	go build ./cmd/pg2stream
+	go build .
 
 .PHONY: fmt
 fmt:
-	go fmt cmd
+	go fmt ./...
