@@ -23,6 +23,10 @@
 
     ./pg2stream -host localhost -user $(whoami)
 
+#### Test Local DB Changes
+
+    make test-sql
+
 ### Todo
 
 * Kinesis

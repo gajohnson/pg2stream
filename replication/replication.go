@@ -23,11 +23,12 @@ type Replication struct {
 func (r *Replication) Connect(ctx context.Context) {
 	var lsn uint64
 
-	config := pgx.ConnConfig{}
-	config.Database = r.Database
-	config.Host = r.Host
-	config.Port = r.Port
-	config.User = r.User
+	config := pgx.ConnConfig{
+		Database: r.Database,
+		Host:     r.Host,
+		Port:     r.Port,
+		User:     r.User,
+	}
 
 	if conn, err := pgx.ReplicationConnect(config); err != nil {
 		panic(err)
