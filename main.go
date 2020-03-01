@@ -34,7 +34,11 @@ func main() {
 		SlotName:          "pg2stream",
 		CreateSlot:        true,
 		DropSlot:          *drop,
-		Options:           []string{"\"include-schemas\" 'off'", "\"include-types\" 'off'"},
+		Options:           []string{
+			"\"include-schemas\" 'off'",
+			"\"include-types\" 'off'",
+			"\"include-xids\" 'on'",
+		},
 	}
 
 	if *kinesis != "" {
