@@ -11,12 +11,16 @@ import (
 
 func main() {
 	fmt.Println("starting pg2stream ...")
+
+	var s stream.Stream
+
 	dbname := flag.String("dbname", "test", "database name")
 	dbhost := flag.String("host", "localhost", "database host")
 	dbport := flag.Int("dbport", 5432, "database port")
 	dbuser := flag.String("user", "root", "database user")
 	drop := flag.Bool("drop", false, "drop replication slot on start up")
 	buffer := flag.Int("buffer", 1, "internal buffer size")
+	kinesis := flag.String("kinesis", "", "kinesis stream name")
 	flag.Parse()
 
 	ctx := context.Context(context.Background())
@@ -33,7 +37,11 @@ func main() {
 		Options:           []string{"\"include-schemas\" 'off'", "\"include-types\" 'off'"},
 	}
 
-	s := stream.KinesisStream{StreamName: "pg2stream"}
+	if *kinesis != "" {
+		s = &stream.KinesisStream{StreamName: *kinesis}
+	} else {
+		s = &stream.StdoutStream{}
+	}
 
 	wal := make(chan pgx.WalMessage, *buffer)
 	ack := make(chan uint64)

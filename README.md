@@ -23,6 +23,19 @@
 
     ./pg2stream -host localhost -user $(whoami)
 
+#### Command line options
+
+	-dbname    database name (default: test)
+	-dbhost:   database host (default: localhost)
+	-dbport:   database port (default: 5432)
+	-dbuser:   database user (default: root)
+	-drop:     drop replication slot on start up (default false)
+	-buffer:   internal buffer size (default: 1)
+	-kinesis:  kinesis stream name (optional)
+
+If -kinesis is specified, output will be sent to that stream. Otherwise, changes are logged to stdout
+for testing purposes.
+
 #### Test Local DB Changes
 
     make test-sql
