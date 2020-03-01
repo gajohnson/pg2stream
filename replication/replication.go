@@ -2,6 +2,7 @@ package replication
 
 import (
 	"context"
+	"fmt"
 	"github.com/jackc/pgx"
 	"time"
 )
@@ -78,6 +79,7 @@ func (r *Replication) acknowlege(ack chan uint64) {
 	for {
 		select {
 		case lsn := <-ack:
+			fmt.Println("ack: ", pgx.FormatLSN(lsn))
 			r.status(lsn)
 		}
 	}

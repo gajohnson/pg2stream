@@ -44,8 +44,6 @@ for testing purposes.
 
 ### Todo
 
-* Partitioning by tx id
-* Batch puts to kinesis
 * Config file support
 * Logging
 * Error handling

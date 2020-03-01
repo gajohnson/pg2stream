@@ -34,15 +34,22 @@ func main() {
 		SlotName:          "pg2stream",
 		CreateSlot:        true,
 		DropSlot:          *drop,
-		Options:           []string{
+		Options: []string{
 			"\"include-schemas\" 'off'",
 			"\"include-types\" 'off'",
 			"\"include-xids\" 'on'",
+			"\"format-version\" '2'",
 		},
 	}
 
 	if *kinesis != "" {
-		s = &stream.KinesisStream{StreamName: *kinesis}
+		s = &stream.KinesisStream{
+			StreamName: *kinesis,
+			BatchCount: 10,
+			BatchSize:  5 << 20, // 5MB
+			RecordSize: 1 << 19, // 512KB
+			MaxWait:    30,      // Seconds
+		}
 	} else {
 		s = &stream.StdoutStream{}
 	}
