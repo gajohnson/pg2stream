@@ -38,11 +38,12 @@ func main() {
 			"\"include-schemas\" 'off'",
 			"\"include-types\" 'off'",
 			"\"include-xids\" 'on'",
+			"\"format-version\" '2'",
 		},
 	}
 
 	if *kinesis != "" {
-		s = &stream.KinesisStream{StreamName: *kinesis}
+		s = &stream.KinesisStream{StreamName: *kinesis, BatchSize: 500, MaxWait: 10}
 	} else {
 		s = &stream.StdoutStream{}
 	}
