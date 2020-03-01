@@ -29,5 +29,6 @@
 
 ### Todo
 
-* Kinesis
-* Kafka
+* Batch puts to kinesis
+* Config file support
+* Kafka streaming

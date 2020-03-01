@@ -33,7 +33,7 @@ func main() {
 		Options:           []string{"\"include-schemas\" 'off'", "\"include-types\" 'off'"},
 	}
 
-	s := stream.StdoutStream{}
+	s := stream.KinesisStream{StreamName: "pg2stream"}
 
 	wal := make(chan pgx.WalMessage, *buffer)
 	ack := make(chan uint64)
